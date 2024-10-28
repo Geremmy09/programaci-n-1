@@ -1,0 +1,168 @@
+INICIO Programa Boletos_teleferico
+
+    // Declaración de variables
+    DECLARAR var_tramo, var_estacion COMO ENTERO
+    DECLARAR total_ventas COMO REAL
+    DECLARAR Nombre, Apellido COMO CADENA
+    DECLARAR estacion, Cantidad_boleto_general, Cantidad_boleto_3eraedad COMO ENTERO
+    DECLARAR cedula COMO REAL
+    DECLARAR Cantidad_boleto_ninos, Cantidad_boleto_menores, acumulador_temporal COMO ENTERO
+    DECLARAR edad COMO ENTERO
+    DECLARAR total_pagar COMO REAL
+    DECLARAR total_boletos, total_boletos_vendidos, boletos_disponible_viaje COMO ENTERO
+    DECLARAR boletos_general_vendidos, boletos_3eraeda_vendidos, boletos_ninos_vendidos COMO ENTERO
+    DECLARAR boletos_menores_vendidos COMO ENTERO
+
+    // Declaración de constantes
+    CONSTANTE precio_boleto_general = 20
+    CONSTANTE precio_boleto_3eraedad = 12
+    CONSTANTE precio_boleto_ninos = 12
+    CONSTANTE cantidad_maxima = 60
+
+    // Procedimiento para seleccionar estación
+    PROCEDIMIENTO seleccionar_estacion()
+        ESCRIBIR 'Seleccione una estación'
+        ESCRIBIR '1.- Barinitas'
+        ESCRIBIR '2.- La Montaña'
+        ESCRIBIR '3.- La Aguada'
+        ESCRIBIR '4.- Loma Redonda'
+        ESCRIBIR '5.- Pico Espejo'
+        LEER var_estacion
+    FIN PROCEDIMIENTO
+
+    // Procedimiento para seleccionar tramo
+    PROCEDIMIENTO seleccionar_tramo()
+        ESCRIBIR 'Seleccione un Tramo'
+        ESCRIBIR '1.- Barinitas - La Montaña'
+        ESCRIBIR '2.- La Montaña - La Aguada'
+        ESCRIBIR '3.- La Aguada - Loma Redonda'
+        ESCRIBIR '4.- Loma Redonda - Pico Espejo'
+        LEER var_tramo
+    FIN PROCEDIMIENTO
+
+    // Procedimiento para seleccionar cantidad de boletos por tipo
+    PROCEDIMIENTO seleccionar_cantidades()
+        ESCRIBIR 'Cantidad de Boletos Generales: '
+        LEER Cantidad_boleto_general
+        ESCRIBIR 'Cantidad de Boletos 3era Edad: '
+        LEER Cantidad_boleto_3eraedad
+        ESCRIBIR 'Cantidad de Boletos Niños: '
+        LEER Cantidad_boleto_ninos
+        acumulador_temporal = Cantidad_boleto_general + Cantidad_boleto_ninos + Cantidad_boleto_3eraedad
+    FIN PROCEDIMIENTO
+
+    // Procedimiento para mostrar el menú principal
+    PROCEDIMIENTO menu()
+        DECLARAR opcion COMO ENTERO
+        
+        REPETIR
+            ESCRIBIR 'Seleccione una opción.'
+            ESCRIBIR '1.- Comprar boletos'
+            ESCRIBIR '2.- Ver Sistema'
+            ESCRIBIR '3.- Salir'
+            LEER opcion
+            
+            SI opcion < 1 O opcion > 3 ENTONCES
+                ESCRIBIR 'Introdujo una opción invalida. Introduzca una nueva opción.'
+            SINO 
+                SI opcion = 1 ENTONCES
+                    acumulador_temporal = 0
+                    LIMPIAR_PANTALLA()
+                    ESCRIBIR 'Venta de Boletos'
+                    ESCRIBIR '----------------'
+                    LEER Nombre
+                    LEER Apellido
+                    LEER cedula
+                    
+                    seleccionar_estacion()
+                    seleccionar_tramo()
+                    seleccionar_cantidades()
+
+                    SI acumulador_temporal > cantidad_maxima ENTONCES
+                        ESCRIBIR 'Cupo Maximo 60 personas. Introduzca una Cantidad Menor.'
+                        acumulador_temporal = 0
+                        seleccionar_cantidades()
+                    FIN SI
+                    
+                    SI acumulador_temporal < cantidad_maxima ENTONCES
+
+                        SI Cantidad_boleto_ninos > 0 ENTONCES
+                            LEER edad
+
+                            SI edad <= 3 ENTONCES
+                                Cantidad_boleto_menores = 1
+                                Cantidad_boleto_ninos = Cantidad_boleto_ninos - Cantidad_boleto_menores
+
+                                MIENTRAS (var_estacion = 5 Y var_tramo = 4) HACER
+                                    ESCRIBIR 'Los menores de 3 años solo pueden subir hasta Loma Redonda.'
+                                    seleccionar_estacion()
+                                    seleccionar_tramo()
+                                FIN MIENTRAS
+
+                            FIN SI
+
+                        FIN SI
+
+                        // Calculo de totales por tipos de boletos y ventas
+                        total_pagar = (Cantidad_boleto_general * precio_boleto_general) + 
+                                      (Cantidad_boleto_3eraedad * precio_boleto_3eraedad) + 
+                                      (Cantidad_boleto_ninos * precio_boleto_ninos)
+                        ESCRIBIR 'Su total a pagar es: ', total_pagar
+
+                        total_ventas = total_ventas + total_pagar
+                        total_boletos = Cantidad_boleto_general + 
+                                        Cantidad_boleto_3eraedad + 
+                                        Cantidad_boleto_ninos + 
+                                        Cantidad_boleto_menores
+
+                        boletos_general_vendidos += Cantidad_boleto_general
+                        boletos_3eraeda_vendidos += Cantidad_boleto_3eraedad
+                        boletos_ninos_vendidos += Cantidad_boleto_ninos
+                        boletos_menores_vendidos += Cantidad_boleto_menores
+
+                        total_boletos_vendidos += total_boletos
+                        boletos_disponible_viaje = cantidad_maxima - total_boletos_vendidos
+
+                        ESPERAR_TECLA()
+                        LIMPIAR_PANTALLA()
+                        
+                SINO SI opcion = 2 ENTONCES // Activar opción ver sistema 
+                    LIMPIAR_PANTALLA()
+                    
+                    ESCRIBIR 'Cantidad de Boletos Disponibles Viaje Actual:', boletos_disponible_viaje
+                    
+                    // Relación de Boletos Vendidos 
+                    ESCRIBIR 'Relación de Boletos Vendidos'
+                    ESCRIBIR '----------------------------'
+                    ESCRIBIR 'Cantidad de Boletos General Vendidos: ', boletos_general_vendidos 
+                    ESCRIBIR 'Cantidad de Boletos 3era Edad Vendidos: ', boletos_3eraeda_vendidos 
+                    ESCRIBIR 'Cantidad de Boletos Niños Vendidos: ', boletos_ninos_vendidos 
+                    ESCRIBIR 'Cantidad de Boletos Menores Vendidos: ', boletos_menores_vendidos 
+                    
+                    // Total de Boletos Vendidos 
+                    ESCRIBIR 'Cantidad Total de Boletos Vendidos:', total_boletos_vendidos 
+
+                    // Relación de Ventas ($)
+                    ESCRIBIR 'Relación de Ventas ($)'
+                    ESCRIBIR '------------------------'
+                    ESCRIBIR 'Total ventas ($):', total_ventas 
+
+                    ESPERAR_TECLA()
+                    LIMPIAR_PANTALLA()
+
+                SINO SI opcion = 3 ENTONCES // Activar opción salir 
+                    SALIR DEL PROGRAMA
+
+                FIN SI
+                
+            FIN SI
+            
+        HASTA QUE FALSO // Repetir indefinidamente hasta que se elija salir
+        
+    FIN PROCEDIMIENTO
+
+INICIO PRINCIPAL
+    menu()
+FIN INICIO PRINCIPAL
+
+FIN Programa Boletos_teleferico
