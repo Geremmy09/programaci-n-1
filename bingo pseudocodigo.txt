@@ -1,0 +1,127 @@
+INICIO
+
+CONSTANTES
+    numerodebingo = 75
+    cartaporjugador = 1
+    Marcador = -1
+
+TIPO
+    TBingotarjeta = MATRIZ[1..5, 1..5] DE ENTERO
+
+VARIABLES
+    Bingotarjeta: TBingotarjeta
+    DrawnNumbers: ARREGLO[1..numerodebingo] DE BOOLEANO
+    RandomNumber, i, j: ENTERO
+
+PROCEDIMIENTO InicializarBingotarjeta(EN VAR Card: TBingotarjeta)
+    DECLARAR NumberSet: ARREGLO[1..numerodebingo] DE ENTERO
+    DECLARAR ColStart: ENTERO
+    
+    ALEATORIZAR() // Inicializa el generador de números aleatorios
+    
+    PARA i DESDE 1 HASTA numerodebingo HACER
+        NumberSet[i] := i // Llenar el conjunto de números disponibles
+
+    PARA j DESDE 1 HASTA 5 HACER
+        ColStart := (j - 1) * 15 + 1 // Calcular el inicio de la columna
+        PARA i DESDE 1 HASTA 5 HACER
+            SI (j = 3) Y (i = 3) ENTONCES
+                Card[i, j] := 0 // Espacio libre en el centro
+            SINO
+                HACER
+                    RandomNumber := ALEATORIO(15) + ColStart // Generar número aleatorio en rango específico
+                MIENTRAS (NumberSet[RandomNumber] = 0) // Asegurarse de que el número no se repita
+                
+                Card[i, j] := RandomNumber // Asignar número a la tarjeta
+                NumberSet[RandomNumber] := 0 // Marcar número como usado
+            FIN SI
+        FIN PARA
+    FIN PARA
+FIN PROCEDIMIENTO
+
+PROCEDIMIENTO SortearNumeroAleatorio(EN VAR Number: ENTERO)
+    HACER
+        Number := ALEATORIO(numerodebingo) + 1 // Generar número aleatorio entre 1 y numerodebingo
+    MIENTRAS (DrawnNumbers[Number] = VERDADERO) // Asegurarse de que el número no haya sido sorteado
+    
+    DrawnNumbers[Number] := VERDADERO // Marcar número como sorteado
+FIN PROCEDIMIENTO
+
+PROCEDIMIENTO MarcarTarjeta(EN VAR Card: TBingotarjeta; Number: ENTERO)
+    PARA i DESDE 1 HASTA 5 HACER
+        PARA j DESDE 1 HASTA 5 HACER
+            SI Card[i, j] = Number ENTONCES 
+                Card[i, j] := Marcador // Marcar el número en la tarjeta con el marcador especial
+            FIN SI
+        FIN PARA
+    FIN PARA
+FIN PROCEDIMIENTO
+
+FUNCIÓN ComprobarGanador(Card: TBingotarjeta): BOOLEANO
+    DECLARAR i, j: ENTERO
+    
+    // Comprobar filas para una victoria
+    PARA i DESDE 1 HASTA 5 HACER 
+        SI (Card[i, 1] = Marcador) Y (Card[i, 2] = Marcador) Y 
+           (Card[i, 3] = Marcador) Y (Card[i, 4] = Marcador) Y 
+           (Card[i, 5] = Marcador) ENTONCES 
+            RETORNAR VERDADERO // Se ha ganado en fila
+            
+    FIN PARA
+    
+    // Comprobar columnas para una victoria
+    PARA j DESDE 1 HASTA 5 HACER 
+        SI (Card[1, j] = Marcador) Y (Card[2, j] = Marcador) Y 
+           (Card[3, j] = Marcador) Y (Card[4, j] = Marcador) Y 
+           (Card[5, j] = Marcador) ENTONCES 
+            RETORNAR VERDADERO // Se ha ganado en columna
+            
+    FIN PARA
+    
+    // Comprobar diagonales para una victoria
+    SI (Card[1, 1] = Marcador) Y (Card[2, 2] = Marcador) Y 
+       (Card[3, 3] = Marcador) Y (Card[4, 4] = Marcador) Y 
+       (Card[5, 5] = Marcador) ENTONCES 
+        RETORNAR VERDADERO // Se ha ganado en diagonal
+    
+    SI (Card[1, 5] = Marcador) Y (Card[2, 4] = Marcador) Y 
+       (Card[3, 3] = Marcador) Y (Card[4, 2] = Marcador) Y 
+       (Card[5, 1] = Marcador) ENTONCES 
+        RETORNAR VERDADERO // Se ha ganado en diagonal inversa
+        
+    RETORNAR FALSO // No hay ganador aún
+FIN FUNCIÓN
+
+INICIO DEL PROGRAMA PRINCIPAL
+
+   InicializarBingotarjeta(Bingotarjeta)
+
+   IMPRIMIR 'Tu tarjeta de bingo:'
+   PARA i DESDE 1 HASTA 5 HACER 
+       PARA j DESDE 1 HASTA 5 HACER 
+           SI Bingotarjeta[i,j] = Marcador ENTONCES 
+               IMPRIMIR ' X ' // Número marcado con X
+           SINO SI Bingotarjeta[i,j]=0 ENTONCES 
+               IMPRIMIR ' * ' // Espacio libre con *
+           SINO 
+               IMPRIMIR Formato(Bingotarjeta[i,j]) // Imprimir número formateado
+           FIN SI 
+       FIN PARA 
+       IMPRIMIR NUEVA_LINEA() // Nueva línea después de cada fila de la tarjeta.
+   FIN PARA 
+
+   REPETIR HASTA QUE FALSO HACER // Bucle infinito para el sorteo de números.
+       SortearNumeroAleatorio(RandomNumber)
+       IMPRIMIR 'Número sorteado: ', RandomNumber
+      
+       MarcarTarjeta(Bingotarjeta, RandomNumber)
+       
+       SI ComprobarGanador(Bingotarjeta) ENTONCES 
+           IMPRIMIR '¡Bingo!' // Mensaje de victoria.
+           SALIR // Terminar el juego si hay un ganador.
+       FIN SI
+      
+       ESPERAR(1000 MILISEGUNDOS) // Pausa un momento.
+   HASTA QUE FALSO
+
+FIN 
