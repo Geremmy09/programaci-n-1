@@ -1,0 +1,100 @@
+Inicio Programa 
+    Definir constantes:
+        Indiv = 101
+        Acomp = 102
+        Grupo = 103
+        Capacidad = 20
+
+    Definir tipos de datos:
+        Tipo Individual:
+            cedula: cadena
+            nombre: cadena
+            email: cadena
+            Telefono: cadena
+
+        Tipo Acompanante:
+            Cedula_a: cadena
+            nombre_a: cadena
+            email_a: cadena
+            Telefono_a: cadena
+
+        Tipo Grupo_r:
+            Cedula_g: cadena
+            nombre_g: cadena
+            email_g: cadena
+            Telefono_g: cadena
+
+    Definir variables globales:
+        Cliente: arreglo de Individual con tamaño Capacidad
+        Acomp_a: arreglo de Acompanante con tamaño Capacidad
+        grupo_a: arreglo de Grupo_r con tamaño Capacidad
+        Cantidad_c, Cantidad_a, Cantidad_g: entero
+        terminado: booleano
+        habitaciones: archivo de texto
+        nombre_hab: cadena
+        precio: real
+        tipo: cadena
+
+    Procedimiento InitStatusLine:
+        Inicializar línea de estado
+
+    Procedimiento InitMenuBar:
+        Inicializar barra de menú
+
+    Procedimiento calculo_i:
+        Repetir hasta que el usuario decida no reservar más:
+            Preguntar si desea realizar una reserva (s/n)
+            Si la respuesta es sí:
+                Solicitar número de días y calcular monto total de la reserva
+                Mostrar datos del cliente y monto a cancelar
+
+    Procedimiento calculo_a:
+        Repetir hasta que el usuario decida no reservar más:
+            Preguntar si desea realizar una reserva (s/n)
+            Si la respuesta es sí:
+                Solicitar número de días y calcular monto total de la reserva para acompañante
+                Mostrar datos del cliente y del acompañante, junto con el monto a cancelar
+
+    Procedimiento calculo_g:
+        Repetir hasta que el usuario decida no reservar más:
+            Preguntar si desea realizar una reserva (s/n)
+            Si la respuesta es sí:
+                Solicitar número de días y calcular monto total de la reserva para grupo
+                Mostrar datos del cliente y del grupo, junto con el monto a cancelar
+
+    Procedimiento descr_hab:
+        Mostrar opciones de habitaciones y manejar selección del usuario
+
+    Procedimiento CargarCliente:
+        Cargar datos de clientes desde un archivo
+
+    Procedimiento GrabarCliente:
+        Guardar datos de clientes en un archivo
+
+    Procedimiento NuevoCliente:
+        Crear un nuevo cliente y guardar sus datos
+
+    Procedimiento CargarAcomp:
+        Cargar datos de acompañantes desde un archivo
+
+    Procedimiento GrabarAcomp:
+        Guardar datos de acompañantes en un archivo
+
+    Procedimiento NuevoAcomp:
+        Crear un nuevo acompañante y guardar sus datos
+
+    Procedimiento CargarGrupo:
+        Cargar datos de grupos desde un archivo
+
+    Procedimiento GrabarGrupo:
+        Guardar datos de grupos en un archivo
+
+    Procedimiento NuevoGrupo:
+        Crear un nuevo grupo y guardar sus datos
+
+    Procedimientos para manejar archivos individuales, acompañantes y grupos.
+
+    Procedimiento HandleEvent(var Suceso):
+        Manejar eventos del programa según comandos recibidos
+
+Fin Programa
